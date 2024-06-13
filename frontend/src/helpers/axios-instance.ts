@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Create an Axios instance with default settings
-const BASE_URL: string = import.meta.env.VITE_API_PATH as string;
+const BASE_URL: string = process.env.VITE_API_PATH as string;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
