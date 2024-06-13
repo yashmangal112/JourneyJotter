@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "coverage": "vitest run --coverage ",
-    "prepare": "npm install"
+    "start": "next start"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx,jsx}": [
