@@ -2,7 +2,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.post('http://localhost:5000/api/auth/email-password/signup', () => {
+  http.post( import.meta.env.VITE_API_PATH + '/api/auth/email-password/signup', () => {
     return new HttpResponse(null, {
       status: 200,
     });
