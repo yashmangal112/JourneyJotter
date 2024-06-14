@@ -36,7 +36,8 @@ function signin() {
           render({ data }) {
             const userId = data?.data?.data?.user?._id;
             const userRole = data?.data?.data?.user?.role;
-            userState.setUser({ _id: userId, role: userRole });
+            const userToken = data?.data?.data?.user?.token;
+            userState.setUser({ _id: userId, role: userRole , token: userToken});
             reset();
             navigate('/');
             return data?.data?.message;

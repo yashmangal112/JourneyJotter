@@ -68,40 +68,48 @@ function AddBlog() {
   const handleCheckboxChange = () => {
     setValue('isFeaturedPost', !formData.isFeaturedPost);
   };
-  const onSumbit = async () => {
-    try {
-      const postPromise = axiosInstance.post('/api/posts/', formData);
-      toast.promise(postPromise, {
-        pending: 'Creating blog post...',
-        success: {
-          render() {
-            reset();
-            navigate('/');
-            return 'Blog created successfully';
-          },
+
+const onSubmit = async () => {
+  try {
+    const postPromise = axiosInstance.post('/api/posts/', formData);
+    toast.promise(postPromise, {
+      pending: 'Creating blog post...',
+      success: {
+        render() {
+          reset();
+          navigate('/');
+          return 'Blog created successfully';
         },
-        error: {
-          render({ data }) {
-            if (data instanceof AxiosError) {
-              if (data?.response?.data?.message) {
-                return data?.response?.data?.message;
-              }
+      },
+      error: {
+        render({ data }) {
+          if (data instanceof AxiosError) {
+            if (data?.response?.data?.message) {
+              return data?.response?.data?.message;
             }
-            return 'Blog creation failed';
-          },
+          }
+          return 'Blog creation failed';
         },
-      });
-      return (await postPromise).data;
-    } catch (error: unknown) {
-      if (isAxiosError(error)) {
-        navigate('/');
+      },
+    });
+    return (await postPromise).data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      // Check if the error is related to authentication
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        console.error('Authentication error: ', error.response?.data?.message);
+        // Handle authentication error specifically
         userState.removeUser();
-        console.error(error.response?.data?.message);
+        navigate('/login'); // Redirect to login page
       } else {
-        console.log(error);
+        console.error('Error response: ', error.response?.data?.message);
       }
+    } else {
+      console.error('Unexpected error: ', error);
     }
-  };
+  }
+};
+
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState<boolean | null>(null);
   useEffect(() => {
@@ -131,7 +139,7 @@ function AddBlog() {
         </div>
       </div>
       <div className="flex justify-center">
-        <form onSubmit={handleSubmit(onSumbit)} className="sm:w-5/6 lg:w-2/3">
+        <form onSubmit={handleSubmit(onSubmit)} className="sm:w-5/6 lg:w-2/3">
           <div className="mb-2 flex items-center">
             <label className="flex items-center">
               <span className="px-2 text-base font-medium text-light-secondary dark:text-dark-secondary">
