@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Cookies from 'js-cookie'; // Use js-cookie to handle cookies
+import Cookies from 'js-cookie';
 
 const BASE_URL = import.meta.env.VITE_API_PATH;
 
