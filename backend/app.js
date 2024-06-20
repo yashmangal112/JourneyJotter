@@ -10,13 +10,20 @@ import errorMiddleware from './middlewares/error-middleware.js';
 
 const app = express();
 
-app.use(
-  cors({
-    // added origin
-    origin: FRONTEND_URL,
-    credentials: true,
-  })
-);
+const allowedOrigins = [FRONTEND_URL];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // If you need to send cookies or other credentials
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -13,40 +13,41 @@ import useAuthData from '@/hooks/useAuthData';
 import userState from '@/utils/user-state';
 import { Link } from 'react-router-dom';
 
-function header() {
+function Header() {
   const navigate = useNavigate();
   const { token, loading } = useAuthData();
 
   const handleLogout = async () => {
     try {
-      const response = axiosInstance.post('/api/auth/signout');
-      toast.promise(response, {
-        pending: 'Wait ...',
-        success: {
-          render({ data }) {
-            userState.removeUser();
-            navigate('/');
-            return data?.data?.message;
+      const response = await axiosInstance.post('/api/auth/signout');
+      toast.promise(
+        Promise.resolve(response), // Ensure it's wrapped as a promise
+        {
+          pending: 'Wait ...',
+          success: {
+            render({ data }) {
+              userState.removeUser();
+              navigate('/');
+              return data?.data?.message || 'Signout successful';
+            },
           },
-        },
-        error: {
-          render({ data }) {
-            if (data instanceof AxiosError) {
-              if (data?.response?.data?.message) {
-                return data?.response?.data?.message;
+          error: {
+            render({ data }) {
+              if (isAxiosError(data)) {
+                return data?.response?.data?.message || 'Signout failed';
               }
-            }
-            return 'Signout failed';
+              return 'Signout failed';
+            },
           },
-        },
-      });
-
-      return (await response).data;
+        }
+      );
     } catch (error) {
       if (isAxiosError(error)) {
         console.error(error.response?.data?.message || 'An error occurred');
+        toast.error(error.response?.data?.message || 'An error occurred');
       } else {
         console.error(error);
+        toast.error('An unexpected error occurred');
       }
     }
   };
@@ -136,4 +137,4 @@ function header() {
   );
 }
 
-export default header;
+export default Header;
