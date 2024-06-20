@@ -21,9 +21,9 @@ function Header() {
     try {
       const response = await axiosInstance.post('/api/auth/signout');
       toast.promise(
-        Promise.resolve(response), // Ensure it's wrapped as a promise
+        Promise.resolve(response),
         {
-          pending: 'Wait ...',
+          pending: 'Signing out ...',
           success: {
             render({ data }) {
               userState.removeUser();
@@ -43,10 +43,10 @@ function Header() {
       );
     } catch (error) {
       if (isAxiosError(error)) {
-        console.error(error.response?.data?.message || 'An error occurred');
+        console.error('Axios error:', error.response?.data?.message || 'An error occurred');
         toast.error(error.response?.data?.message || 'An error occurred');
       } else {
-        console.error(error);
+        console.error('Unexpected error:', error);
         toast.error('An unexpected error occurred');
       }
     }
