@@ -19,7 +19,9 @@ function Header() {
 
   const handleLogout = async () => {
     try {
+      console.log("Sending signout request..."); // Debug log
       const response = await axiosInstance.post('/api/auth/signout');
+      console.log("Signout response:", response); // Debug log
       toast.promise(
         Promise.resolve(response),
         {
