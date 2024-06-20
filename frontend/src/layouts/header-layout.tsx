@@ -5,7 +5,7 @@ import LogInIcon from '@/assets/svg/login-icon.svg';
 import AppIcon from '@/assets/svg/app-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import Hero from '@/components/hero';
-import { AxiosError, isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import axiosInstance from '@/helpers/axios-instance';
 import Loader from '@/components/skeletons/loader';
